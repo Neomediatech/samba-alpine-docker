@@ -16,10 +16,27 @@ services:
     hostname: samba
     <<: *default-opts
     ports:
-      - "137:137/udp"
-      - "138:138/udp"
-      - "139:139/tcp"
-      - "445:445/tcp"
+      - target: 137
+        published: 137
+        protocol: udp
+        mode: host
+      - target: 138
+        published: 138
+        protocol: udp
+        mode: host
+      - target: 139
+        published: 139
+        protocol: tcp
+        mode: host
+      - target: 445
+        published: 445
+        protocol: tcp
+        mode: host
+    #ports:
+    #  - "137:137/udp"
+    #  - "138:138/udp"
+    #  - "139:139/tcp"
+    #  - "445:445/tcp"
     volumes:
       - rlst_shares:/data
       - /srv/data/rlst_shares/confs/shares.conf:/shares.conf:ro

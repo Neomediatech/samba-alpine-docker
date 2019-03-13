@@ -5,7 +5,8 @@ LABEL maintainer="docker-dario@neomediatech.it"
 RUN apk update && apk upgrade && \ 
     apk add --no-cache tzdata bash tini samba shadow && \
     cp /usr/share/zoneinfo/Europe/Rome /etc/localtime && \
-    rm -rf /usr/local/share/doc /usr/local/share/man
+    rm -rf /usr/local/share/doc /usr/local/share/man && \
+    adduser -D -G users -H -S -g 'Samba User' -h /tmp smbuser 
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
@@ -16,5 +17,3 @@ EXPOSE 137/udp 138/udp 139 445
 HEALTHCHECK --interval=60s --timeout=15s CMD smbclient -L '\\localhost' -U '%' -m SMB3
             
 ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["smbd", "-F", "-d 3", "--no-process-group"]

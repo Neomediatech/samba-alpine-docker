@@ -34,4 +34,5 @@ if [ ! -f $LOGFILE ]; then
 fi
 
 exec tail -f $LOGFILE &
+exec smbd -F --no-process-group </dev/null
 exec "$@"

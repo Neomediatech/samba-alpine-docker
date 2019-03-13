@@ -1,26 +1,34 @@
-version: '3.4'
+# use to create a swarm template in Portainer
+version: '3.7'
+
+x-default-opts: 
+  &default-opts
+  deploy:
+    restart_policy:
+      condition: on-failure
+      delay: 5s
+      #max_attempts: 3
+      window: 20s
 
 services:
   samba:
     image: neomediatech/samba-alpine
-    environment:
-      TZ: 'Europe/Rome'
-    networks:
-      - default
+    hostname: tftp
+    <<: *default-opts
     ports:
       - "137:137/udp"
       - "138:138/udp"
       - "139:139/tcp"
       - "445:445/tcp"
-    read_only: true
-    tmpfs:
-      - /tmp
-    restart: unless-stopped
-    stdin_open: true
-    tty: true
     volumes:
-      - /mnt:/mnt:z
-    command: '-s "Mount;/mnt"'
+      - rlst_shares:/mnt
+    environment:
+      TZ: 'Europe/Rome'
 
-networks:
-  default:
+volumes:
+  rlst_shares:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /srv/data/rlst_shares/files

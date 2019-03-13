@@ -5,6 +5,19 @@ workgroup="${WORKGROUP:-"workgroup"}"
 
 sed -i 's|^\( *workgroup = \).*|\1'"$workgroup"'|' $file
 
+if [ -f /shares.conf ]; then
+  found=0
+  for share in $(egrep -o "^\[(.*)\]" /shares.conf|sed 's/\[//;s/\]//'); do
+    grep -iq "\[$share\]" $file
+    if [ $? -eq 0 ]; then
+      found=1
+    fi
+  done
+  if [ $found -eq 0 ]; then
+    cat /shares.conf >> $file
+  fi
+fi
+
 if [ ! -d /data/logs ]; then
   mkdir -p /data/logs
 fi

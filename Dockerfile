@@ -4,7 +4,22 @@ LABEL maintainer="docker-dario@neomediatech.it"
 
 RUN apk update && apk upgrade && \ 
     apk add --no-cache tzdata bash tini samba shadow && \
-    cp /usr/share/zoneinfo/Europe/Rome /etc/localtime
+    cp /usr/share/zoneinfo/Europe/Rome /etc/localtime && \
+    useradd -c 'Samba User' -d /tmp -M -r smbuser && \
+    sed -i 's|^\(   log file = \).*|\1/dev/stdout|' /etc/samba/smb.conf && \
+    sed -i 's|^\(   unix password sync = \).*|\1no|' /etc/samba/smb.conf && \
+    sed -i '/Share Definitions/,$d' /etc/samba/smb.conf && \
+    echo '   security = user' >>/etc/samba/smb.conf && \
+    echo '   directory mask = 0777' >>/etc/samba/smb.conf && \
+    echo '   force create mode = 0666' >>/etc/samba/smb.conf && \
+    echo '   force directory mode = 0777' >>/etc/samba/smb.conf && \
+    echo '   force group = users' >>/etc/samba/smb.conf && \
+    echo '   load printers = no' >>/etc/samba/smb.conf && \
+    echo '   printing = bsd' >>/etc/samba/smb.conf && \
+    echo '   printcap name = /dev/null' >>/etc/samba/smb.conf && \
+    echo '   disable spoolss = yes' >>/etc/samba/smb.conf && \
+    echo '   socket options = TCP_NODELAY IPTOS_LOWDELAY SO_RCVBUF=65536 SO_SNDBUF=65536' >>/etc/samba/smb.conf && \
+    echo '' >>/etc/samba/smb.conf && \
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

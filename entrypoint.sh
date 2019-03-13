@@ -1,7 +1,7 @@
 #!/bin/bash
 
-
-
+file=/etc/samba/smb.conf
+workgroup="${WORKGROUP:-"workgroup"}" 
 
 sed -i 's|^\( *workgroup = \).*|\1'"$workgroup"'|' $file
 

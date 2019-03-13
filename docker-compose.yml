@@ -22,6 +22,7 @@ services:
       - "445:445/tcp"
     volumes:
       - rlst_shares:/mnt
+      - /srv/data/rlst_shares/confs/shares.conf:/shares.conf:ro
     environment:
       TZ: 'Europe/Rome'
 

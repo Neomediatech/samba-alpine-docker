@@ -13,7 +13,7 @@ x-default-opts:
 services:
   samba:
     image: neomediatech/samba-alpine
-    hostname: tftp
+    hostname: samba
     <<: *default-opts
     ports:
       - "137:137/udp"

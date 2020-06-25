@@ -40,6 +40,7 @@ services:
     volumes:
       - rlst_shares:/data
       - /srv/data/rlst_shares/confs/shares.conf:/shares.conf:ro
+      - /srv/data/rlst_shares/private:/var/lib/samba/private
     environment:
       TZ: 'Europe/Rome'
 
